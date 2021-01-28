@@ -1,0 +1,10 @@
+{
+  "name": "gitlab-webhook-proxy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Tom Coleman <tom@thesnail.org>",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
