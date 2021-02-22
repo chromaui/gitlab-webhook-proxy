@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
 
-const { REST_API, TOKEN } = process.env;
+const { REST_API, TOKEN, TOKEN_GENERALI_DE } = process.env;
 
 function getStatus(build) {
   switch (build.status) {
@@ -45,7 +45,7 @@ function getStatus(build) {
   };
 }
 
-async function setCommitStatus(build, repoId) {
+async function setCommitStatus(build, { repoId, token }) {
   const status = getStatus(build);
 
   console.log(build);
@@ -64,7 +64,7 @@ async function setCommitStatus(build, repoId) {
     {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${TOKEN}`,
+        Authorization: `Bearer ${token || TOKEN}`,
       },
     }
   );
@@ -78,14 +78,19 @@ app.use(bodyParser.json());
 
 app.post('/webhook', async (req, res) => {
   const { event, build } = req.body;
-  const { repoId } = req.query;
+  const { repoId, tokenName } = req.query;
 
   if (!repoId) {
     throw new Error('Need a repoId query param on webhook URL');
   }
+  
+  let token;
+  if (tokenName === 'generali_de') {
+    token = TOKEN_GENERALI_DE;
+  }
 
   if (event === 'build-status-changed') {
-    await setCommitStatus(build, repoId);
+    await setCommitStatus(build, { token, repoId });
   }
 
   res.end('OK');
