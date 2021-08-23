@@ -1,0 +1,11 @@
+# AWS variables
+export AWS_ACCESS_KEY_ID=""
+export AWS_SECRET_ACCESS_KEY=""
+export AWS_QUEUE_URL=""
+export AWS_REGION=""
+
+# GitLab variables
+export GITLAB_URL="http://localhost:8929/api/v4"
+export GITLAB_TOKEN=""
+
+export LOG_VERBOSITY="1"
