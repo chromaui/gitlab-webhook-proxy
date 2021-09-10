@@ -120,49 +120,42 @@ func (gc *Client) setCommitStatus(message types.BuildMessage) error {
 
 // getStatusUpdate builds and returns a StatusUpdate struct based on the details from a BuildMessage
 func getStatusUpdate(message types.BuildMessage) StatusUpdate {
-	if message.Build.Status == "FAILED" {
-		return StatusUpdate{
+	var update StatusUpdate
+
+	switch message.Build.Status {
+	case "FAILED":
+		update = StatusUpdate{
 			State:       "failed",
 			Description: fmt.Sprintf("Build %v has suffered a system error. Please try again.", message.Build.Number),
 		}
-	}
-
-	if message.Build.Status == "BROKEN" {
-		return StatusUpdate{
+	case "BROKEN":
+		update = StatusUpdate{
 			State:       "failed",
 			Description: fmt.Sprintf("Build %v failed to render.", message.Build.Number),
 		}
-	}
-
-	if message.Build.Status == "DENIED" {
-		return StatusUpdate{
+	case "DENIED":
+		update = StatusUpdate{
 			State:       "failed",
 			Description: fmt.Sprintf("Build %v denied.", message.Build.Number),
 		}
-	}
-
-	if message.Build.Status == "PENDING" {
-		return StatusUpdate{
+	case "PENDING":
+		update = StatusUpdate{
 			State:       "pending",
 			Description: fmt.Sprintf("Build %v has %v changes that must be accepted.", message.Build.Number, message.Build.ChangeCount),
 		}
-	}
-
-	if message.Build.Status == "ACCEPTED" {
-		return StatusUpdate{
+	case "ACCEPTED":
+		update = StatusUpdate{
 			State:       "success",
 			Description: fmt.Sprintf("Build %v accepted.", message.Build.Number),
 		}
-	}
-
-	if message.Build.Status == "PASSED" {
-		return StatusUpdate{
+	case "PASSED":
+		update = StatusUpdate{
 			State:       "success",
 			Description: fmt.Sprintf("Build %v passed unchanged.", message.Build.Number),
 		}
 	}
 
-	return StatusUpdate{}
+	return update
 }
 
 // filterErrorResponse returns true if the response we get from GitLab isn't one that we need to handle
