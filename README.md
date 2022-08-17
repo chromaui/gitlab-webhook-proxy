@@ -76,7 +76,7 @@ To access GitLab's API via webhook, you'll need to configure the following envir
 
 Deploy the webhook to the provider that best suits your organization's requirements. Possible deployment solutions include [Heroku](https://devcenter.heroku.com/articles/deploying-nodejs).
 
-## Connect to Chromatic.
+## Connect to Chromatic
 
 Click the "Add webhook" button on your project's manage screen and provide the deployed URL for the webhok. We **recommend** passing in the `repoId` query parameter to ensure we can identify the correct project.
 
